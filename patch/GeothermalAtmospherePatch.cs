@@ -14,7 +14,6 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
         const float MaxPowerPerVolume = 100;
 
         [UsedImplicitly]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Used by mod loader")]
         private static void Prefix(Atmosphere __instance)
         {
             try
