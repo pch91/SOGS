@@ -67,10 +67,10 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             mainconfigs.Add("EnabledT", Config.Bind("0 - General configuration", "Eneble Termal System", true, "Enable or disable part of mod. values can be false or true"));
 
 
-            fconfigEvents.Add("OuchRadius", Config.Bind("1 - Battery", "Damage Radius", 190f, ""));
-            fconfigEvents.Add("OuchDps", Config.Bind("1 - Battery", "Damage increment", 0.5f, ""));
-            fconfigEvents.Add("damageRechargeBateryNuke", Config.Bind("1 - Battery", "Damage Recharge Batery", 0.01f, ""));
-            fconfigEvents.Add("fatRechargeBateryNuke", Config.Bind("1 - Battery", "Factor Recharge", 0.05f, ""));
+            fconfigEvents.Add("OuchRadius", Config.Bind("1 - Battery", "Damage Radius", 190f, "Minimum battery damage radius to food and people"));
+            fconfigEvents.Add("OuchDps", Config.Bind("1 - Battery", "Damage increment", 0.5f, "Damage factor dealt to food and people\n Values between 0 and 1"));
+            fconfigEvents.Add("damageRechargeBateryNuke", Config.Bind("1 - Battery", "Damage Recharge Batery", 0.01f, "Damage caused to the battery after self-charging\n Values between 0.1 and 0.01"));
+            fconfigEvents.Add("fatRechargeBateryNuke", Config.Bind("1 - Battery", "Factor Recharge", 0.005f, "battery recharge factor\n Values between 0 and 1"));
 
             fconfigEvents.Add("FCW", Config.Bind("2 - Combustion", "Factor combustion wather", 0.1f, ""));
 
