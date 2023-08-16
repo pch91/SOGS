@@ -1,7 +1,26 @@
 # Stationeers mod "Events" for BepInEx.
 
-For info about what this mod does, read the description in Steam Workshop
+This SOGS mog and a set of changes that bring, in addition to a greater challenge to your game play, focus on greater realism to the game.
 
+Changes (what to expect when using this mod)
+*Nuclear batteries
+- Recharges by itself
+- Loses life on recharge charge
+- Deals damage to humans (no armor or open helmet cam) and to food and plants
+- Damage dealt in an area that increases up to 2x according to battery life
+
+*Combustion
+- Volatiles + oxygen produces 2 h2o
+- Reduced rate compared to h2combuster
+
+*Thermal
+- Wash now and hot
+- Planets with more real lava
+- Atmosphere movement in hot places near lava
+- Temperature sharing between atmospheres close to the lava
+- the HardShuit kit now makes you resistant to the temperature close to the lava, as long as you keep the helmet closed, and the suit has energy.
+
+For more info about what this mod does, read the description in Steam Workshop
 
 # Instructions
 
