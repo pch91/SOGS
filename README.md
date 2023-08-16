@@ -2,18 +2,23 @@
 
 This SOGS mog and a set of changes that bring, in addition to a greater challenge to your game play, focus on greater realism to the game.
 
-Changes (what to expect when using this mod)
-*Nuclear batteries
+<b>Changes (what to expect when using this mod):</b>
+<h3><b><u>--------Spoiler---------</u></b></h3>
+
+<h2>Nuclear batteries</h2>
+
 - Recharges by itself
 - Loses life on recharge charge
 - Deals damage to humans (no armor or open helmet cam) and to food and plants
 - Damage dealt in an area that increases up to 2x according to battery life
 
-*Combustion
+<h2>Combustion</h2>
+
 - Volatiles + oxygen produces 2 h2o
 - Reduced rate compared to h2combuster
 
-*Thermal
+<h2>Thermal</h2>
+
 - Wash now and hot
 - Planets with more real lava
 - Atmosphere movement in hot places near lava
