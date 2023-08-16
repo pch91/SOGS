@@ -106,7 +106,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                                SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "thing.Position in " + thing.Position, SOGS.Logs.DEBUG);
                                SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "(pos - thing.Position) in " + (pos - thing.Position), SOGS.Logs.DEBUG);
                                SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "Distancia da bateria in " + distanceSqr, SOGS.Logs.DEBUG);
-                               SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "Raio de dano in " + OuchRadius, SOGS.Logs.DEBUG);
+                               SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "Raio de dano in " + efetiveRadios, SOGS.Logs.DEBUG);
 
                                 if (p)
                                 {
