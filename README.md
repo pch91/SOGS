@@ -1,4 +1,4 @@
-# Stationeers mod "Events" for BepInEx.
+# Stationeers mod "SOGS" for BepInEx.
 
 This SOGS mog and a set of changes that bring, in addition to a greater challenge to your game play, focus on greater realism to the game.
 
@@ -46,4 +46,4 @@ I think this work fine but, for secure put then in both side, client and server 
 # Developers
 
 Pch91
-Thunder321
+lizelive
