@@ -95,7 +95,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
 
                     if (distanceFromLavaSigned < DamageRange)
                     {
-                        var maxPower = AtmosphericsManager.Instance.TickSpeedMs * MaxPowerPerVolume * __instance.Volume;
+                        var maxPower = AtmosphericsManager.Instance.TickSpeedSeconds * MaxPowerPerVolume * __instance.Volume;
                         var power = Mathf.Clamp01(distanceFromLavaSigned / DamageRange) * maxPower;
                         SOGS.log("GeothermalAtmospherePatch2 :: ConvectionPosfix n passou 3--> " + __instance.ReferenceId + " " + __instance.DisplayName + " pulou " + __instance.Mode, SOGS.Logs.DEBUG);
                         __instance.GasMixture.AddEnergy(power); // no idea how much heat you should get.

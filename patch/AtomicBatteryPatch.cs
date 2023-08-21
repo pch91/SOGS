@@ -53,20 +53,27 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                         new Thread(() =>
                         {
                             Thread.CurrentThread.IsBackground = true;
-                            SOGS.log("AtomicBatteryPatch :: Prefix --> Tread stage1 recharge " + __instance.ReferenceId, SOGS.Logs.DEBUG);
-                            SOGS.log("AtomicBatteryPatch :: Prefix --> Tread " + __instance.ReferenceId + " rounds " + __instance.PowerMaximum / (fatheal), SOGS.Logs.DEBUG);
+                            try
+                            {
+                                SOGS.log("AtomicBatteryPatch :: Prefix --> Tread stage1 recharge " + __instance.ReferenceId, SOGS.Logs.DEBUG);
+                                SOGS.log("AtomicBatteryPatch :: Prefix --> Tread " + __instance.ReferenceId + " rounds " + __instance.PowerMaximum / (fatheal), SOGS.Logs.DEBUG);
 
-                            if (__instance.PowerMaximum - __instance.DamageState.Total > fatheal) {
-                                for (int i = 0; i < __instance.PowerMaximum / fatheal; i++)
+                                if (__instance.PowerMaximum - __instance.DamageState.Total > fatheal)
                                 {
+                                    for (int i = 0; i < __instance.PowerMaximum / fatheal; i++)
+                                    {
 
-                                    SOGS.log("AtomicBatteryPatch :: Prefix --> Tread will recharge " + __instance.ReferenceId + " rodadas " + __instance.AddPowerSafe(fatheal), SOGS.Logs.DEBUG);
-                                    SOGS.log("AtomicBatteryPatch :: Prefix --> Tread stage1 " + __instance.ReferenceId + " round " + i, SOGS.Logs.DEBUG);
+                                        SOGS.log("AtomicBatteryPatch :: Prefix --> Tread will recharge " + __instance.ReferenceId + " rodadas " + __instance.AddPowerSafe(fatheal), SOGS.Logs.DEBUG);
+                                        SOGS.log("AtomicBatteryPatch :: Prefix --> Tread stage1 " + __instance.ReferenceId + " round " + i, SOGS.Logs.DEBUG);
 
-                                    SOGS.log("AtomicBatteryPatch :: Prefix --> Tread stage1 go sleep" + __instance.ReferenceId, SOGS.Logs.DEBUG);
+                                        SOGS.log("AtomicBatteryPatch :: Prefix --> Tread stage1 go sleep" + __instance.ReferenceId, SOGS.Logs.DEBUG);
 
-                                    Thread.Sleep(2000);
+                                        Thread.Sleep(2000);
+                                    }
                                 }
+                            }catch(Exception e)
+                            {
+                                SOGS.log("AtomicBatteryPatch :: Prefix --> Tread1 error" + __instance.ReferenceId +" ex: "+e.StackTrace, SOGS.Logs.ERROR);
                             }
                         }).Start();
 
@@ -76,54 +83,59 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                     new Thread(() =>
                     {
                         Thread.CurrentThread.IsBackground = true;
-                        var pos = __instance.Position;
-                        //var ouchRadiusSqr = MathF.Round((2*Mathf.PI)*OuchRadius,6);
-                        foreach (var stuff in Thing._colliderLookup.Values)
-                        {
-                            var thing = stuff;
-
-                            //this part needs to be run on main thread i gues
-                            //var col = stuff.Key;
-                            var p = stuff is Human;
-                            var o = stuff is Plant || stuff is Food || stuff is StackableFood;
-
-                            bool humanconditiondamage = false;
-
-                            if (p)
+                        try { 
+                            var pos = __instance.Position;
+                            //var ouchRadiusSqr = MathF.Round((2*Mathf.PI)*OuchRadius,6);
+                            foreach (var stuff in Thing._colliderLookup.Values)
                             {
-                                var human = stuff as Human;
-                                humanconditiondamage = human.HelmetSlot.Occupant != null && !human.HelmetSlot.Occupant.IsOpen && human.SuitSlot.Occupant != null && human.SuitSlot.Occupant.Powered;
+                                var thing = stuff;
 
-                            }
-                            //var thingPos = stuff.Key.ClosestPointOnBounds(pos);
-                            //var distanceSqr = thing.Bounds.SqrDistance(pos);
-                            var distanceSqr = MathF.Round((pos - thing.Position).sqrMagnitude,6);
-                            var efetiveRadios = BateryStatic.OuchRadius + (__instance.DamageState.Total / 100);
+                                //this part needs to be run on main thread i gues
+                                //var col = stuff.Key;
+                                var p = stuff is Human;
+                                var o = stuff is Plant || stuff is Food || stuff is StackableFood;
 
-                            if (distanceSqr > 0 && distanceSqr <= efetiveRadios && stuff != __instance)
-                            {
-                               SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "pos in " + pos, SOGS.Logs.DEBUG);
-                               SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "thing.Position in " + thing.Position, SOGS.Logs.DEBUG);
-                               SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "(pos - thing.Position) in " + (pos - thing.Position), SOGS.Logs.DEBUG);
-                               SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "Distancia da bateria in " + distanceSqr, SOGS.Logs.DEBUG);
-                               SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "Raio de dano in " + efetiveRadios, SOGS.Logs.DEBUG);
+                                bool humanconditiondamage = false;
 
                                 if (p)
                                 {
-                                    if (!humanconditiondamage)
+                                    var human = stuff as Human;
+                                    humanconditiondamage = human.HelmetSlot.Occupant != null && !human.HelmetSlot.Occupant.IsOpen && human.SuitSlot.Occupant != null && human.SuitSlot.Occupant.Powered;
+
+                                }
+                                //var thingPos = stuff.Key.ClosestPointOnBounds(pos);
+                                //var distanceSqr = thing.Bounds.SqrDistance(pos);
+                                var distanceSqr = MathF.Round((pos - thing.Position).sqrMagnitude,6);
+                                var efetiveRadios = BateryStatic.OuchRadius + (__instance.DamageState.Total / 100);
+
+                                if (distanceSqr > 0 && distanceSqr <= efetiveRadios && stuff != __instance)
+                                {
+                                   SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "pos in " + pos, SOGS.Logs.DEBUG);
+                                   SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "thing.Position in " + thing.Position, SOGS.Logs.DEBUG);
+                                   SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "(pos - thing.Position) in " + (pos - thing.Position), SOGS.Logs.DEBUG);
+                                   SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "Distancia da bateria in " + distanceSqr, SOGS.Logs.DEBUG);
+                                   SOGS.log("AtomicBatteryPatch :: Prefix --> " + thing.DisplayName + "Raio de dano in " + efetiveRadios, SOGS.Logs.DEBUG);
+
+                                    if (p)
+                                    {
+                                        if (!humanconditiondamage)
+                                        {
+                                            float damage = (MathF.Pow(distanceSqr, (-0.000001f / 1)) / 1) * BateryStatic.OuchDps;
+                                            SOGS.log("AtomicBatteryPatch :: Prefix --> Baterry cause damage in "+ thing.DisplayName+" damage: "+ damage, SOGS.Logs.DEBUG);
+                                            thing.DamageState.Damage(ChangeDamageType.Increment, damage, DamageUpdateType.Radiation);
+                                        }
+                                    }
+                                    else if (o)
                                     {
                                         float damage = (MathF.Pow(distanceSqr, (-0.000001f / 1)) / 1) * BateryStatic.OuchDps;
-                                        SOGS.log("AtomicBatteryPatch :: Prefix --> Baterry cause damage in "+ thing.DisplayName+" damage: "+ damage, SOGS.Logs.DEBUG);
+                                        SOGS.log("AtomicBatteryPatch :: Prefix --> Baterry cause damage in " + thing.DisplayName + " damage: " + damage, SOGS.Logs.DEBUG);
                                         thing.DamageState.Damage(ChangeDamageType.Increment, damage, DamageUpdateType.Radiation);
                                     }
                                 }
-                                else if (o)
-                                {
-                                    float damage = (MathF.Pow(distanceSqr, (-0.000001f / 1)) / 1) * BateryStatic.OuchDps;
-                                    SOGS.log("AtomicBatteryPatch :: Prefix --> Baterry cause damage in " + thing.DisplayName + " damage: " + damage, SOGS.Logs.DEBUG);
-                                    thing.DamageState.Damage(ChangeDamageType.Increment, damage, DamageUpdateType.Radiation);
-                                }
                             }
+                        }catch (Exception e)
+                        {
+
                         }
                     }).Start();
                 }
