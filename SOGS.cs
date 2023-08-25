@@ -98,6 +98,9 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
 
             StaticAttributes.Thermalconfigs.Add("DamageRange", (fconfigEvents["DamageRange"] as ConfigEntry<float>).Value);
             StaticAttributes.Thermalconfigs.Add("MaxPowerPerVolume", (fconfigEvents["MaxPowerPerVolume"] as ConfigEntry<float>).Value);
+
+
+            StaticAttributes.mineConfigsFloat.Add("rangeDP", 50f);
         }
     }
 }
