@@ -5,6 +5,7 @@ using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Pipes;
 using Assets.Scripts.Util;
 using HarmonyLib;
+using Reagents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,14 +24,14 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(DeepMiner), "Start")]
-        static void DPSStartPatch(DeepMiner __instance)
+        static void DPSStartPatch(ref DeepMiner __instance)
         {
 
-            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " Strat ", SOGS.Logs.INFO);
+            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " Strat ", SOGS.Logs.DEBUG);
 
             if (dps.ContainsKey(__instance.ReferenceId))
             {
-                SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " remove instance dps ", SOGS.Logs.INFO);
+                SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " remove instance dps ", SOGS.Logs.DEBUG);
                 dps.Remove(__instance.ReferenceId);
             }
 
@@ -38,25 +39,26 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
             typeof(DeepMiner).GetField("_oreAmountPerSpawnMin", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, 0);
 
 
-            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " Strat defor dps ", SOGS.Logs.INFO);
+            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " Strat defor dps ", SOGS.Logs.DEBUG);
 
             Vector3 vec = __instance.Position.GridCenter(1f, 0f);
-            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " vec " + vec, SOGS.Logs.INFO);
+            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " vec " + vec, SOGS.Logs.DEBUG);
 
             Vector3 mvec = new Vector3(StaticAttributes.mineConfigsFloat["rangeDP"], StaticAttributes.mineConfigsFloat["rangeDP"], StaticAttributes.mineConfigsFloat["rangeDP"]) / 2;
-            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " mvec " + mvec, SOGS.Logs.INFO);
+            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " mvec " + mvec, SOGS.Logs.DEBUG);
 
             Vector3 zero = Vector3.zero;
-            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " zero " + zero, SOGS.Logs.INFO);
+            SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " zero " + zero, SOGS.Logs.DEBUG);
+           // DeepMiner __instance1 = __instance;
 
-            new Thread(() =>
-            {
-                Thread.CurrentThread.IsBackground = true;
+           // new Thread(() =>
+           // {
+             //   Thread.CurrentThread.IsBackground = true;
                 try
                 {
                     Color32[] color = (Color32[])typeof(PortableGPR).GetField("OreColors", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 
-                    SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " created parameter and vectors ", SOGS.Logs.INFO);
+                    SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " created parameter and vectors ", SOGS.Logs.DEBUG);
                     int n = 0;
                     for (int i = 1; i < StaticAttributes.mineConfigsFloat["rangeDP"] - 1; i++)
                     {
@@ -78,19 +80,19 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                         }
                     }
 
-                    if (n<1)
+                    if (n < 1)
                     {
                         __instance.Error = 9999;
                     }
-                    SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " nmines " + n, SOGS.Logs.INFO);
+                    SOGS.log("MinePatch :: DPSStartPatch --> " + __instance.ReferenceId + " nmines " + n, SOGS.Logs.DEBUG);
 
-                    dps.Add(__instance.ReferenceId,n);
+                    dps.Add(__instance.ReferenceId, n);
                 }
                 catch (Exception e)
                 {
                     SOGS.log("MinePatch :: DPSStartPatch --> Tread1 error" + __instance.ReferenceId + " ex: " + e.StackTrace, SOGS.Logs.ERROR);
                 }
-            }).Start();
+            //}).Start();
 
         }
 
@@ -102,22 +104,22 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
         {
 
             DirtyOre dirtyOre = Thing.Create<DirtyOre>(dro, __instance.ExportSlot.Location);
-            SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId, SOGS.Logs.INFO);
+            SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId, SOGS.Logs.DEBUG);
             float qty = 0;
             if (dps.ContainsKey(__instance.ReferenceId) && dps[__instance.ReferenceId] >= 1f) {
-                qty = UnityEngine.Random.Range(1, 50* Mathf.Clamp(dps[__instance.ReferenceId]/100f,0.1f,1f));
-                SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " qty spawn " + qty, SOGS.Logs.INFO);
+                qty = UnityEngine.Random.Range(1, 50* Mathf.Clamp(dps[__instance.ReferenceId]/100f,0.1f,0.3f));
+                SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " qty spawn " + qty, SOGS.Logs.DEBUG);
             }
             else
             {
-                SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " qty spawn " + 0, SOGS.Logs.INFO);
+                SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " qty spawn " + 0, SOGS.Logs.DEBUG);
             }
 
             if (qty > 0)
             {
                 dirtyOre.SetQuantity(qty);
                 dirtyOre.ParentSlot = null;
-                SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " spawn " + dirtyOre.Quantity, SOGS.Logs.INFO);
+                SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " spawn " + dirtyOre.Quantity, SOGS.Logs.DEBUG);
                 OnServer.MoveToSlot(dirtyOre, __instance.ExportSlot);
             }
             else
@@ -128,7 +130,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
             //FieldInfo type = typeof(DeepMiner).GetField("_timeSinceLastOreSpawn", BindingFlags.NonPublic | BindingFlags.Instance);
             //SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " _timeSinceLastOreSpawn type" + type, SOGS.Logs.INFO);
             typeof(DeepMiner).GetField("_timeSinceLastOreSpawn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, GameManager.GameTime);
-            SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " _timeSinceLastOreSpawn " + typeof(DeepMiner).GetField("_timeSinceLastOreSpawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance), SOGS.Logs.INFO);
+            SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " _timeSinceLastOreSpawn " + typeof(DeepMiner).GetField("_timeSinceLastOreSpawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance), SOGS.Logs.DEBUG);
 
             return false;
         }
@@ -141,6 +143,28 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
             if(dps.ContainsKey(__instance.ReferenceId) && dps[__instance.ReferenceId]<1)
             {
                 __instance.Error = 9999;
+            }
+        }
+
+
+        [HarmonyPostfix]
+        [HarmonyDebug]
+        [HarmonyPatch(typeof(DirtyOre), "CentrifugeProcessUnit")]
+        static void CentrifugeProcessUnitPatch(ref DirtyOre __instance,ref ReagentMixture __result)
+        {
+            foreach (byte item in StaticAttributes.mineOreReagentId)
+            {
+                if (__instance.ReferenceId == item)
+                {
+                    if (StaticAttributes.CentrifugeDirtyOreMetod == 1) {
+                        __result = null;
+                        break;
+                    }
+                    if (StaticAttributes.CentrifugeDirtyOreMetod == 2)
+                    {
+                        __result = __result * float.Parse(StaticAttributes.mineConfigsFloat["RetCentPorc"].ToString());
+                    }
+                }
             }
         }
 

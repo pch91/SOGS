@@ -24,6 +24,10 @@
     <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>j:\SteamLibrary\steamapps\common\Stationeers\rocketstation_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>j:\SteamLibrary\steamapps\common\Stationeers\rocketstation_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+
 
     <Reference Include="0Harmony">
       <HintPath>j:\SteamLibrary\steamapps\common\Stationeers\BepInEx\core\0Harmony.dll</HintPath>

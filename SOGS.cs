@@ -5,6 +5,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch;
+using System.Linq;
+using Reagents;
+using static Assets.Scripts.ContactSlotData;
+using BepInEx.Harmony;
+using sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scripts;
 
 namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
 {
@@ -48,7 +53,24 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
                 Handleconfig();
                 if (bool.Parse(StaticAttributes.configs["EnabledMod"].ToString())) {
                     var harmony = new Harmony("net.pch91.stationeers.SOGS.patch");
-                    harmony.PatchAll();
+                    if (bool.Parse(StaticAttributes.configs["EnabledBP"].ToString())) {
+                        harmony.PatchAll(typeof(BackpackPatch));
+                    }
+                    if (bool.Parse(StaticAttributes.configs["EnabledM"].ToString())) {
+                        harmony.PatchAll(typeof(MinePatch));
+                    }
+                    if (bool.Parse(StaticAttributes.configs["EnabledC"].ToString()))
+                    {
+                        harmony.PatchAll(typeof(AtmosphereCombustPatch));
+                    }
+                    if (bool.Parse(StaticAttributes.configs["EnabledT"].ToString()))
+                    {
+                        harmony.PatchAll(typeof(GeothermalAtmospherePatch));
+                    }
+                    if (bool.Parse(StaticAttributes.configs["EnabledB"].ToString()))
+                    {
+                        harmony.PatchAll(typeof(AtomicBatteryPatch));
+                    }
                 }
                 log("Finish patch", Logs.INFO);
             }
@@ -65,7 +87,8 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             mainconfigs.Add("EnabledB", Config.Bind("0 - General configuration", "Eneble Battery Nuke", true, "Enable or disable part of mod. values can be false or true"));
             mainconfigs.Add("EnabledC", Config.Bind("0 - General configuration", "Eneble Combuston system", true, "Enable or disable part of mod. values can be false or true"));
             mainconfigs.Add("EnabledT", Config.Bind("0 - General configuration", "Eneble Termal System", true, "Enable or disable part of mod. values can be false or true"));
-
+            mainconfigs.Add("EnabledM", Config.Bind("0 - General configuration", "Eneble Mine System", false, "Enable or disable part of mod. values can be false or true \n is ALFA (not safe)"));
+            mainconfigs.Add("EnabledBP", Config.Bind("0 - General configuration", "Eneble Backpack System", true, "Enable or disable part of mod. values can be false or true"));
 
             fconfigEvents.Add("OuchRadius", Config.Bind("1 - Battery", "Damage Radius", 190f, "Minimum battery damage radius to food and people"));
             fconfigEvents.Add("OuchDps", Config.Bind("1 - Battery", "Damage increment", 0.5f, "Damage factor dealt to food and people\n Values between 0 and 1"));
@@ -76,6 +99,12 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
 
             fconfigEvents.Add("DamageRange", Config.Bind("3 - Thermal", "Action Radios", 10f, ""));
             fconfigEvents.Add("MaxPowerPerVolume", Config.Bind("2 - Thermal", "Max Power Per Volume", 100f, ""));
+
+            fconfigEvents.Add("rangeDP", Config.Bind("2 - Mine", "Distance", 10f, "maximum distance that deepMine picks up ore"));
+            fconfigEvents.Add("CentrifugeDirtyOreMetod", Config.Bind("2 - Mine", "return method", (byte)2 , "Pre-processing return method, values can be 1 or 2: \n 1 - does not return rare ores like lead,uranium,nikel....\n 2 - returns a reduced percentage for rare ores."));
+            fconfigEvents.Add("Ores", Config.Bind("2 - Mine", "Ores aplicate", "LEAD,COBALT", "Ores in which the method will be applied ....\n  COBALT,LEAD,NICKEL,URANIUM They are the ores that can be applied when specifying more than one separated by a comma."));
+            fconfigEvents.Add("RetCentPorc", Config.Bind("2 - Mine", "return factor", 0.1f, "ore return factor when processing a dirty ore in method 2 \n Values between 0.1 and 1"));
+
 
             loglevel = (mainconfigs["LogEnabled"] as ConfigEntry<string>).Value.ToUpper();
 
@@ -88,6 +117,8 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             StaticAttributes.configs.Add("EnabledB", (mainconfigs["EnabledB"] as ConfigEntry<bool>).Value);
             StaticAttributes.configs.Add("EnabledC", (mainconfigs["EnabledC"] as ConfigEntry<bool>).Value);
             StaticAttributes.configs.Add("EnabledT", (mainconfigs["EnabledT"] as ConfigEntry<bool>).Value);
+            StaticAttributes.configs.Add("EnabledM", (mainconfigs["EnabledM"] as ConfigEntry<bool>).Value);
+            StaticAttributes.configs.Add("EnabledBP", (mainconfigs["EnabledBP"] as ConfigEntry<bool>).Value);
 
             StaticAttributes.Baterryconfigs.Add("OuchRadius", (fconfigEvents["OuchRadius"] as ConfigEntry<float>).Value);
             StaticAttributes.Baterryconfigs.Add("OuchDps", (fconfigEvents["OuchDps"] as ConfigEntry<float>).Value);
@@ -100,7 +131,19 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             StaticAttributes.Thermalconfigs.Add("MaxPowerPerVolume", (fconfigEvents["MaxPowerPerVolume"] as ConfigEntry<float>).Value);
 
 
-            StaticAttributes.mineConfigsFloat.Add("rangeDP", 50f);
+            StaticAttributes.mineConfigsFloat.Add("rangeDP", (fconfigEvents["rangeDP"] as ConfigEntry<float>).Value);
+            StaticAttributes.CentrifugeDirtyOreMetod = (fconfigEvents["CentrifugeDirtyOreMetod"] as ConfigEntry<byte>).Value;
+            StaticAttributes.mineConfigsFloat.Add("RetCentPorc", (fconfigEvents["RetCentPorc"] as ConfigEntry<float>).Value);
+
+            StaticAttributes.mineOreReagentIdDic.Add("COBALT", 37);
+            StaticAttributes.mineOreReagentIdDic.Add("LEAD", 12);
+            StaticAttributes.mineOreReagentIdDic.Add("NICKEL", 11);
+            StaticAttributes.mineOreReagentIdDic.Add("URANIUM", 6);
+
+            String yx = (fconfigEvents["Ores"] as ConfigEntry<string>).Value;
+
+            StaticAttributes.CentrifugeDirtyOreMetod = 1;
+            StaticAttributes.mineOreReagentId = StaticAttributes.mineOreReagentIdDic.Where(x => yx.Contains(x.Key)).Select(x=> x.Value).ToArray();
         }
     }
 }
