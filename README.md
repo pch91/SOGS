@@ -12,6 +12,12 @@ This SOGS mog and a set of changes that bring, in addition to a greater challeng
 - Deals damage to humans (no armor or open helmet cam) and to food and plants
 - Damage dealt in an area that increases up to 2x according to battery life
 
+<h2>Backpacks and Belts</h2>
+
+- Not allowed to contain one inside the other, backpack -> backpack, belt -> belt, backpack -> belt,
+- Rxclusive belt slot inside backpacks
+- belt -> backpack only allowed when in its slot
+
 <h2>Combustion</h2>
 
 - Volatiles + oxygen produces 2 h2o
@@ -24,6 +30,11 @@ This SOGS mog and a set of changes that bring, in addition to a greater challeng
 - Atmosphere movement in hot places near lava
 - Temperature sharing between atmospheres close to the lava
 - the HardShuit kit now makes you resistant to the temperature close to the lava, as long as you keep the helmet closed, and the suit has energy.
+
+<h2>Mining [Alpha] </h2> 
+
+- Deepminer agora retorna dirty ore de acordo com a quantidade de minerio em sua area. 
+- centrifuge when processing dirty can reduce the return of some ores, such as preventing them from returning.
 
 For more info about what this mod does, read the description in Steam Workshop
 
