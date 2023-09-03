@@ -99,7 +99,13 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                             if (p)
                             {
                                 var human = stuff as Human;
-                                humanconditiondamage = human.HelmetSlot.Occupant != null && !human.HelmetSlot.Occupant.IsOpen && human.SuitSlot.Occupant != null && human.SuitSlot.Occupant.Powered && human.Species != Species.Robot;
+
+                                if (human.Species == Species.Robot)
+                                {
+                                    continue;
+                                }
+
+                                humanconditiondamage = human.HelmetSlot.Occupant != null && !human.HelmetSlot.Occupant.IsOpen && human.SuitSlot.Occupant != null && human.SuitSlot.Occupant.Powered;
 
                             }
 
