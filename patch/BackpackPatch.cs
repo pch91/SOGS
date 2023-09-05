@@ -75,6 +75,12 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                             || (destinationslottype == Slot.Class.Back && destinationSlot.Type == Slot.Class.None)
                         )
                     )
+                    ||
+                    (
+                        instanceslottype == Slot.Class.Uniform
+                        &&
+                        destinationslottype == Slot.Class.Uniform
+                    )
                     
                 ){
                     __result = false;
