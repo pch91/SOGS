@@ -12,8 +12,32 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
     [HarmonyPatch]
     class BackpackPatch
     {
+        [HarmonyPatch(typeof(WorldManager.InventoryData), "Spawn")]
+        [HarmonyPostfix]
+        private static void Spawnpatch(WorldManager.InventoryData __instance, Assets.Scripts.Objects.Thing parentEntity, ColorSwatch colorSwatch)
+        {
 
-        [HarmonyPatch(typeof(Assets.Scripts.Objects.Thing), "CanEnter")]
+            if (parentEntity is Backpack && StaticAttributes.beltPosition == 0) {
+                if (__instance.SlotId == parentEntity.Slots.Count-1)
+                {
+                    foreach (Slot slot in parentEntity.Slots )
+                    {
+                        if (slot.Occupant == null && (slot.Type == __instance.SourcePrefab.SlotType || slot.Type == Slot.Class.None)) {
+                            OnServer.Create<DynamicThing>(__instance.SourcePrefab, parentEntity.Slots.Last());
+                        }
+                    }
+
+                }
+
+                if (__instance.SourcePrefab.SlotType == Slot.Class.Belt && __instance.SlotId != parentEntity.Slots.Count-1)
+                {
+                    OnServer.Create<DynamicThing>(__instance.SourcePrefab, parentEntity.Slots.Last());
+                }
+            }
+        }
+
+
+            [HarmonyPatch(typeof(Assets.Scripts.Objects.Thing), "CanEnter")]
         [HarmonyPostfix]
         private static void CanEnterpatch(Assets.Scripts.Objects.Thing __instance, Slot destinationSlot, ref bool __result)
         {
