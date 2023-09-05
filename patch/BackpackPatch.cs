@@ -63,7 +63,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
         {
             if (__instance is Backpack) {
                 SOGS.log("BackpackPatch :: CanEnterpatch --> " + __instance.ReferenceId + " cratete backpack ", SOGS.Logs.DEBUG);
-                if (StaticAttributes.beltPosition > 0 && StaticAttributes.beltPosition < 9){
+                if (StaticAttributes.beltPosition > 0 && StaticAttributes.beltPosition < 9){ 
                     __instance.Slots[StaticAttributes.beltPosition-1].StringKey = "Belt";
                     __instance.Slots[StaticAttributes.beltPosition-1].StringHash = Animator.StringToHash(__instance.Slots[StaticAttributes.beltPosition-1].StringKey);
                     __instance.Slots[StaticAttributes.beltPosition - 1].Type = Slot.Class.Belt;
