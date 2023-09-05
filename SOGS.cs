@@ -105,7 +105,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             fconfigEvents.Add("Ores", Config.Bind("2 - Mine", "Ores aplicate", "LEAD,COBALT", "Ores in which the method will be applied ....\n  COBALT,LEAD,NICKEL,URANIUM They are the ores that can be applied when specifying more than one separated by a comma."));
             fconfigEvents.Add("RetCentPorc", Config.Bind("2 - Mine", "return factor", 0.1f, "ore return factor when processing a dirty ore in method 2 \n Values between 0.1 and 1"));
 
-            fconfigEvents.Add("beltPossitionBP", Config.Bind("3 - Backpack configuration", "Belt Slot Possition", 7, "The position where the belt can be placed needs to change if you modify the start game or use mods that modify it so that the belts are generated. values from 1 to 10 \n 0 defines the last slot"));
+            fconfigEvents.Add("beltPossitionBP", Config.Bind("3 - Backpack configuration", "Belt Slot Possition", 0, "The position where the belt can be placed needs to change if you modify the start game or use mods that modify it so that the belts are generated. values from 1 to 10 \n 0 defines the last slot"));
 
             loglevel = (mainconfigs["LogEnabled"] as ConfigEntry<string>).Value.ToUpper();
 
