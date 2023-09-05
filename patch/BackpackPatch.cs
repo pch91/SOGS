@@ -13,17 +13,18 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
     class BackpackPatch
     {
         [HarmonyPatch(typeof(WorldManager.InventoryData), "Spawn")]
-        [HarmonyPostfix]
-        private static void Spawnpatch(WorldManager.InventoryData __instance, Assets.Scripts.Objects.Thing parentEntity, ColorSwatch colorSwatch)
+        [HarmonyPrefix]
+        private static void Spawnpatch(ref WorldManager.InventoryData __instance, Assets.Scripts.Objects.Thing parentEntity, ColorSwatch colorSwatch)
         {
 
             if (parentEntity is Backpack && StaticAttributes.beltPosition == 0) {
                 if (__instance.SlotId == parentEntity.Slots.Count-1)
                 {
-                    foreach (Slot slot in parentEntity.Slots )
+                    for ( int i = 0; i < parentEntity.Slots.Count; i++ )
                     {
-                        if (slot.Occupant == null && (slot.Type == __instance.SourcePrefab.SlotType || slot.Type == Slot.Class.None)) {
-                            OnServer.Create<DynamicThing>(__instance.SourcePrefab, parentEntity.Slots.Last());
+                        if (parentEntity.Slots[i].Occupant == null && (parentEntity.Slots[i].Type == __instance.SourcePrefab.SlotType || parentEntity.Slots[i].Type == Slot.Class.None)) {
+                            //OnServer.Create<DynamicThing>(__instance.SourcePrefab, parentEntity.Slots.Last());
+                            __instance.SlotId = i;
                         }
                     }
 
@@ -31,7 +32,8 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 
                 if (__instance.SourcePrefab.SlotType == Slot.Class.Belt && __instance.SlotId != parentEntity.Slots.Count-1)
                 {
-                    OnServer.Create<DynamicThing>(__instance.SourcePrefab, parentEntity.Slots.Last());
+                    //OnServer.Create<DynamicThing>(__instance.SourcePrefab, parentEntity.Slots.Last());
+                    __instance.SlotId = parentEntity.Slots.Count - 1;
                 }
             }
         }
