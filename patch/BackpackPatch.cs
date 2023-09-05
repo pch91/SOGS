@@ -1,6 +1,8 @@
 ﻿using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Items;
 using HarmonyLib;
+using SimpleSpritePacker;
+using System.ComponentModel.Design;
 using System.Linq;
 using UnityEngine;
 using static Assets.Scripts.Networking.NetworkUpdateType;
@@ -57,13 +59,19 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 
         [HarmonyPatch(typeof(Assets.Scripts.Objects.Thing), "Awake")]
         [HarmonyPrefix]
-        private static void CanEnterpatch(Assets.Scripts.Objects.Thing __instance)
+        private static void Awakepatch(Assets.Scripts.Objects.Thing __instance)
         {
             if (__instance is Backpack) {
                 SOGS.log("BackpackPatch :: CanEnterpatch --> " + __instance.ReferenceId + " cratete backpack ", SOGS.Logs.DEBUG);
-                __instance.Slots.Last().StringKey = "Belt";
-                __instance.Slots.Last().StringHash = Animator.StringToHash(__instance.Slots.Last().StringKey);
-                __instance.Slots.Last().Type = Slot.Class.Belt;
+                if (StaticAttributes.beltPosition > 0 && StaticAttributes.beltPosition < 9){
+                    __instance.Slots[StaticAttributes.beltPosition-1].StringKey = "Belt";
+                    __instance.Slots[StaticAttributes.beltPosition-1].StringHash = Animator.StringToHash(__instance.Slots[StaticAttributes.beltPosition-1].StringKey);
+                    __instance.Slots[StaticAttributes.beltPosition - 1].Type = Slot.Class.Belt;
+                } else {
+                    __instance.Slots.Last().StringKey = "Belt";
+                    __instance.Slots.Last().StringHash = Animator.StringToHash(__instance.Slots.Last().StringKey);
+                    __instance.Slots.Last().Type = Slot.Class.Belt;
+                }
             }
         }
 
