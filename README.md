@@ -33,7 +33,7 @@ This SOGS mog and a set of changes that bring, in addition to a greater challeng
 
 <h2>Mining [Alpha] </h2> 
 
-- Deepminer agora retorna dirty ore de acordo com a quantidade de minerio em sua area. 
+- Deepminer now returns dirty ore according to the amount of ore in its area.
 - centrifuge when processing dirty can reduce the return of some ores, such as preventing them from returning.
 
 For more info about what this mod does, read the description in Steam Workshop
