@@ -23,6 +23,9 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 
         public static byte CentrifugeDirtyOreMetod;
 
+        public static int beltPosition;
+
+
         public static String incMetName { get; set; }
         public static String confcinc { get; set; }
     }
