@@ -157,7 +157,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                 double qty = (double)((typeof(ReagentMixture).GetField(item).GetValue(__result) as Reagent)?.Quantity);
                 if (qty > 0.0)
                 {
-                    SOGS.log("MinePatch :: CentrifugeProcessUnitPatch --> " + __result.ToString() + " qty "+ qty, SOGS.Logs.INFO);
+                    SOGS.log("MinePatch :: CentrifugeProcessUnitPatch --> " + __result.ToString() + " qty "+ qty, SOGS.Logs.DEBUG);
                     if (StaticAttributes.CentrifugeDirtyOreMetod == 1)
                     {
                         __result -= __result;
@@ -165,7 +165,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                     }
                     if (StaticAttributes.CentrifugeDirtyOreMetod == 2)
                     {
-                        SOGS.log("MinePatch :: CentrifugeProcessUnitPatch --> " + __result.ToString() + " remove ", SOGS.Logs.INFO);
+                        SOGS.log("MinePatch :: CentrifugeProcessUnitPatch --> " + __result.ToString() + " remove ", SOGS.Logs.DEBUG);
 
                         __result = __result * float.Parse(StaticAttributes.mineConfigsFloat["RetCentPorc"].ToString());
                     }
