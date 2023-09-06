@@ -152,18 +152,36 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
         [HarmonyPatch(typeof(DirtyOre), "CentrifugeProcessUnit")]
         static void CentrifugeProcessUnitPatch(ref DirtyOre __instance,ref ReagentMixture __result)
         {
-            foreach (byte item in StaticAttributes.mineOreReagentId)
-            {
-                if (__instance.ReferenceId == item)
+
+            foreach(string item in StaticAttributes.mineOreReagentId) {
+                double qty = (double)((typeof(ReagentMixture).GetField(item).GetValue(__result) as Reagent)?.Quantity);
+                if (qty > 0.0)
                 {
-                    if (StaticAttributes.CentrifugeDirtyOreMetod == 1) {
-                        __result = null;
+                    SOGS.log("MinePatch :: CentrifugeProcessUnitPatch --> " + __result.ToString() + " qty "+ qty, SOGS.Logs.INFO);
+                    if (StaticAttributes.CentrifugeDirtyOreMetod == 1)
+                    {
+                        __result -= __result;
                         break;
                     }
                     if (StaticAttributes.CentrifugeDirtyOreMetod == 2)
                     {
+                        SOGS.log("MinePatch :: CentrifugeProcessUnitPatch --> " + __result.ToString() + " remove ", SOGS.Logs.INFO);
+
                         __result = __result * float.Parse(StaticAttributes.mineConfigsFloat["RetCentPorc"].ToString());
                     }
+
+                    /*SOGS.log("MinePatch :: CentrifugeProcessUnitPatch --> " + __result.ToString() + " de qty " + (100 * float.Parse(StaticAttributes.mineConfigsFloat["RetCentPorc"].ToString())), SOGS.Logs.INFO);
+                    if (StaticAttributes.CentrifugeDirtyOreMetod == 2 && __instance.Quantity >=  (100 * float.Parse(StaticAttributes.mineConfigsFloat["RetCentPorc"].ToString())) )
+                    {
+                        SOGS.log("MinePatch :: CentrifugeProcessUnitPatch --> " + __result.ToString() + " remove ", SOGS.Logs.INFO);
+
+                        __instance.Quantity -= (int)(100 * float.Parse(StaticAttributes.mineConfigsFloat["RetCentPorc"].ToString()));
+                    }
+                    else
+                    {
+                        __result -= __result;
+                        break;
+                    }*/
                 }
             }
         }

@@ -95,10 +95,10 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             fconfigEvents.Add("damageRechargeBateryNuke", Config.Bind("1 - Battery", "Damage Recharge Batery", 0.01f, "Damage caused to the battery after self-charging\n Values between 0.1 and 0.01"));
             fconfigEvents.Add("fatRechargeBateryNuke", Config.Bind("1 - Battery", "Factor Recharge", 0.005f, "battery recharge factor\n Values between 0 and 1"));
 
-            fconfigEvents.Add("FCW", Config.Bind("2 - Combustion", "Factor combustion wather", 0.1f, ""));
+            fconfigEvents.Add("FCW", Config.Bind("2 - Combustion", "Factor combustion wather", 0.1f, "water generation factor when there is volatile combustion and o2"));
 
-            fconfigEvents.Add("DamageRange", Config.Bind("3 - Thermal", "Action Radios", 10f, ""));
-            fconfigEvents.Add("MaxPowerPerVolume", Config.Bind("2 - Thermal", "Max Power Per Volume", 100f, ""));
+            fconfigEvents.Add("DamageRange", Config.Bind("3 - Thermal", "Action Radios", 10f, "conversation radius near lava"));
+            fconfigEvents.Add("MaxPowerPerVolume", Config.Bind("2 - Thermal", "Max Power Per Volume", 100f, "maximum temperature transmission near the lava"));
 
             fconfigEvents.Add("rangeDP", Config.Bind("2 - Mine", "Distance", 10f, "maximum distance that deepMine picks up ore"));
             fconfigEvents.Add("CentrifugeDirtyOreMetod", Config.Bind("2 - Mine", "return method", (byte)2 , "Pre-processing return method, values can be 1 or 2: \n 1 - does not return rare ores like lead,uranium,nikel....\n 2 - returns a reduced percentage for rare ores."));
@@ -136,14 +136,14 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             StaticAttributes.CentrifugeDirtyOreMetod = (fconfigEvents["CentrifugeDirtyOreMetod"] as ConfigEntry<byte>).Value;
             StaticAttributes.mineConfigsFloat.Add("RetCentPorc", (fconfigEvents["RetCentPorc"] as ConfigEntry<float>).Value);
 
-            StaticAttributes.mineOreReagentIdDic.Add("COBALT", 37);
-            StaticAttributes.mineOreReagentIdDic.Add("LEAD", 12);
-            StaticAttributes.mineOreReagentIdDic.Add("NICKEL", 11);
-            StaticAttributes.mineOreReagentIdDic.Add("URANIUM", 6);
+            StaticAttributes.mineOreReagentIdDic.Add("COBALT", "Cobalt");
+            StaticAttributes.mineOreReagentIdDic.Add("LEAD", "Lead");
+            StaticAttributes.mineOreReagentIdDic.Add("NICKEL", "Nickel");
+            StaticAttributes.mineOreReagentIdDic.Add("URANIUM", "Uranium");
 
             String yx = (fconfigEvents["Ores"] as ConfigEntry<string>).Value;
 
-            StaticAttributes.CentrifugeDirtyOreMetod = 1;
+            //StaticAttributes.CentrifugeDirtyOreMetod = 1;
             StaticAttributes.mineOreReagentId = StaticAttributes.mineOreReagentIdDic.Where(x => yx.Contains(x.Key)).Select(x=> x.Value).ToArray();
 
             StaticAttributes.beltPosition = (fconfigEvents["beltPossitionBP"] as ConfigEntry<int>).Value;

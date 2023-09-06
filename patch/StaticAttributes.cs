@@ -17,9 +17,9 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 
         public static Dictionary<string, float> mineConfigsFloat = new Dictionary<string, float>();
 
-        public static Dictionary<string, byte> mineOreReagentIdDic = new Dictionary<string, byte>();
+        public static Dictionary<string, string> mineOreReagentIdDic = new Dictionary<string, string>();
 
-        public static byte[] mineOreReagentId;
+        public static string[] mineOreReagentId;
 
         public static byte CentrifugeDirtyOreMetod;
 
