@@ -17,7 +17,8 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
         private static bool Prefix(Atmosphere __instance,
                                    ref bool ____inflamed)
         {
-            try{
+            try
+            {
                 float molesOfH2 = Mathf.Min(__instance.GasMixture.TotalFuel, __instance.GasMixture.Oxygen.Quantity * 2f);
                 float molesOfO2 = molesOfH2 / 2f;
                 float burnPercentage = 0.95f;
@@ -46,7 +47,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
                 __instance.GasMixture.AddEnergy(__instance.CombustionEnergy);
                 __instance.BurnedPropaneRatio = removedMolesH2;
                 __instance.CleanBurnRate = float.Parse(typeof(Atmosphere).GetMethod("CombustableMix", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(__instance, null).ToString());
-                ____inflamed = true; 
+                ____inflamed = true;
             }
             catch (Exception e)
             {

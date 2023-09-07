@@ -1,10 +1,8 @@
 ﻿using Assets.Scripts.Atmospherics;
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Entities;
-using Assets.Scripts.Objects.Items;
 using HarmonyLib;
 using JetBrains.Annotations;
-using sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch;
 using System;
 using System.Diagnostics;
 using UnityEngine;
@@ -26,11 +24,11 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
                     // le shrug i guess you do not have le lava 
                     return;
 
-                SOGS.log("GeothermalAtmospherePatch2 :: ConvectionPosfix 01--> " 
+                SOGS.log("GeothermalAtmospherePatch2 :: ConvectionPosfix 01--> "
                     + __instance.ReferenceId,
                     SOGS.Logs.DEBUG);
                 //y= 20000./(1+0.1.^(10000./x))-0.5
-                var maxPower = MathF.Min(AtmosphericsManager.Instance.TickSpeedSeconds * MaxPowerPerVolume * __instance.Volume,20000f);
+                var maxPower = MathF.Min(AtmosphericsManager.Instance.TickSpeedSeconds * MaxPowerPerVolume * __instance.Volume, 20000f);
 
                 var distanceFromLavaSigned = __instance.WorldPosition.y - WorldManager.LavaLevel;
                 if (__instance.Thing != null)
@@ -100,7 +98,8 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
                     SOGS.log("GeothermalAtmospherePatch2 :: ConvectionPosfix n passou 3--> " + __instance.ReferenceId + " " + __instance.DisplayName + " pulou " + __instance.Mode, SOGS.Logs.DEBUG);
                     __instance.GasMixture.AddEnergy(power); // no idea how much heat you should get.
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 // Get stack trace for the exception with source file information
                 var st = new StackTrace(e, true);
@@ -108,7 +107,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
                 var frame = st.GetFrame(0);
                 // Get the line number from the stack frame
                 var line = frame.GetFileLineNumber();
-                SOGS.log("GeothermalAtmospherePatch2 :: ConvectionPosfix --> ex " + __instance.Thing.ReferenceId + " " + __instance.Thing.DisplayName + ""+ frame+" :: "+line, SOGS.Logs.DEBUG);
+                SOGS.log("GeothermalAtmospherePatch2 :: ConvectionPosfix --> ex " + __instance.Thing.ReferenceId + " " + __instance.Thing.DisplayName + "" + frame + " :: " + line, SOGS.Logs.DEBUG);
 
                 UnityEngine.Debug.LogException(e);
                 Console.WriteLine(e.StackTrace);

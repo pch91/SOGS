@@ -1,16 +1,12 @@
 ﻿using Assets.Scripts.Objects;
-using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Entities;
+using Assets.Scripts.Objects.Items;
+using CharacterCustomisation;
 using HarmonyLib;
 using JetBrains.Annotations;
-using UnityEngine;
 using System;
-using static System.Net.Mime.MediaTypeNames;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-using System.Reflection;
 using System.Threading;
-using CharacterCustomisation;
+using UnityEngine;
 
 namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 {
@@ -46,7 +42,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                 if (__instance.IsEmpty && (__instance.PowerMaximum - __instance.DamageState.Total > fatheal))
                 {
                     SOGS.log("AtomicBatteryPatch :: Prefix --> stage1" + __instance.ReferenceId, SOGS.Logs.DEBUG);
-                    SOGS.log("AtomicBatteryPatch :: Prefix --> Baterry"+ __instance.ReferenceId + " sufer damage "+ MathF.Round(__instance.DamageState.MaxDamage * BateryStatic.damageRechargeBateryNuke, 6), SOGS.Logs.DEBUG);
+                    SOGS.log("AtomicBatteryPatch :: Prefix --> Baterry" + __instance.ReferenceId + " sufer damage " + MathF.Round(__instance.DamageState.MaxDamage * BateryStatic.damageRechargeBateryNuke, 6), SOGS.Logs.DEBUG);
                     __instance.DamageState.Damage(ChangeDamageType.Increment, MathF.Round(__instance.DamageState.MaxDamage * BateryStatic.damageRechargeBateryNuke, 6), DamageUpdateType.Decay);
 
                     new Thread(() =>
@@ -70,9 +66,10 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                                     Thread.Sleep(2000);
                                 }
                             }
-                        }catch(Exception e)
+                        }
+                        catch (Exception e)
                         {
-                            SOGS.log("AtomicBatteryPatch :: Prefix --> Tread1 error" + __instance.ReferenceId +" ex: "+e.StackTrace, SOGS.Logs.ERROR);
+                            SOGS.log("AtomicBatteryPatch :: Prefix --> Tread1 error" + __instance.ReferenceId + " ex: " + e.StackTrace, SOGS.Logs.ERROR);
                         }
                     }).Start();
 
@@ -82,7 +79,8 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                 new Thread(() =>
                 {
                     Thread.CurrentThread.IsBackground = true;
-                    try { 
+                    try
+                    {
                         var pos = __instance.Position;
                         //var ouchRadiusSqr = MathF.Round((2*Mathf.PI)*OuchRadius,6);
                         foreach (var stuff in Thing._colliderLookup.Values)
@@ -111,7 +109,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 
                             //var thingPos = stuff.Key.ClosestPointOnBounds(pos);
                             //var distanceSqr = thing.Bounds.SqrDistance(pos);
-                            var distanceSqr = MathF.Round((pos - thing.Position).sqrMagnitude,6);
+                            var distanceSqr = MathF.Round((pos - thing.Position).sqrMagnitude, 6);
                             var efetiveRadios = BateryStatic.OuchRadius + (__instance.DamageState.Total / 100);
 
                             if (distanceSqr > 0 && distanceSqr <= efetiveRadios && stuff != __instance)
@@ -127,7 +125,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                                     if (!humanconditiondamage)
                                     {
                                         float damage = (MathF.Pow(distanceSqr, (-0.000001f / 1)) / 1) * BateryStatic.OuchDps;
-                                        SOGS.log("AtomicBatteryPatch :: Prefix --> Baterry cause damage in "+ thing.DisplayName+" damage: "+ damage, SOGS.Logs.DEBUG);
+                                        SOGS.log("AtomicBatteryPatch :: Prefix --> Baterry cause damage in " + thing.DisplayName + " damage: " + damage, SOGS.Logs.DEBUG);
                                         thing.DamageState.Damage(ChangeDamageType.Increment, damage, DamageUpdateType.Radiation);
                                     }
                                 }
@@ -139,12 +137,15 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                                 }
                             }
                         }
-                    }catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
-
+                        Debug.LogException(e);
+                        Console.WriteLine(e.StackTrace);
                     }
                 }).Start();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Debug.LogException(e);
                 Console.WriteLine(e.StackTrace);
