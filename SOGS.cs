@@ -95,14 +95,14 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             fconfigEvents.Add("damageRechargeBateryNuke", Config.Bind("1 - Battery", "Damage Recharge Batery", 0.01f, "Damage caused to the battery after self-charging\n Values between 0.1 and 0.01"));
             fconfigEvents.Add("fatRechargeBateryNuke", Config.Bind("1 - Battery", "Factor Recharge", 0.005f, "battery recharge factor\n Values between 0 and 1"));
 
-            fconfigEvents.Add("FCW", Config.Bind("2 - Combustion", "Factor combustion wather", 0.1f, "water generation factor when there is volatile combustion and o2"));
+            fconfigEvents.Add("FCW", Config.Bind("2 - Combustion", "Factor combustion wather", 0.05f, "water generation factor when there is volatile combustion and o2"));
 
             fconfigEvents.Add("DamageRange", Config.Bind("3 - Thermal", "Action Radios", 10f, "conversation radius near lava"));
             fconfigEvents.Add("MaxPowerPerVolume", Config.Bind("2 - Thermal", "Max Power Per Volume", 100f, "maximum temperature transmission near the lava"));
 
             fconfigEvents.Add("rangeDP", Config.Bind("2 - Mine", "Distance", 10f, "maximum distance that deepMine picks up ore"));
             fconfigEvents.Add("CentrifugeDirtyOreMetod", Config.Bind("2 - Mine", "return method", (byte)2, "Pre-processing return method, values can be 1 or 2: \n 1 - does not return rare ores like lead,uranium,nikel....\n 2 - returns a reduced percentage for rare ores."));
-            fconfigEvents.Add("Ores", Config.Bind("2 - Mine", "Ores aplicate", "LEAD,COBALT", "Ores in which the method will be applied ....\n  COBALT,LEAD,NICKEL,URANIUM They are the ores that can be applied when specifying more than one separated by a comma."));
+            fconfigEvents.Add("Ores", Config.Bind("2 - Mine", "Ores aplicate", "LEAD,COBALT,NICKEL", "Ores in which the method will be applied ....\n  COBALT,LEAD,NICKEL,URANIUM They are the ores that can be applied when specifying more than one separated by a comma."));
             fconfigEvents.Add("RetCentPorc", Config.Bind("2 - Mine", "return factor", 0.1f, "ore return factor when processing a dirty ore in method 2 \n Values between 0.1 and 1"));
 
             fconfigEvents.Add("beltPossitionBP", Config.Bind("3 - Backpack configuration", "Belt Slot Possition", 0, "The position where the belt can be placed needs to change if you modify the start game or use mods that modify it so that the belts are generated. values from 1 to 10 \n 0 defines the last slot"));
