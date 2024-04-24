@@ -1,6 +1,9 @@
 ﻿using Assets.Scripts.Atmospherics;
+using Assets.Scripts.Objects.Items;
+using Assets.Scripts.Objects.Pipes;
 using HarmonyLib;
 using JetBrains.Annotations;
+using Reagents;
 using sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch;
 using System;
 using System.Collections.Generic;
@@ -15,39 +18,13 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
     {
         [UsedImplicitly]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Used by mod loader")]
-        private static void Prefix(Atmosphere __instance,ref float rateOverride,
+        private static void Prefix(Atmosphere __instance, ref float rateOverride,
                                    ref bool ____inflamed,
                                    out Dictionary<string, object> __state)
         {
 
             __state = new Dictionary<string, object>();
-            /* try old
-             {
-                 float molesOfH2 = Mathf.Min(__instance.GasMixture.TotalFuel, __instance.GasMixture.Oxygen.Quantity * 2f);
-                 float molesOfO2 = molesOfH2 / 2f;
-                 float burnPercentage = 0.95f;
-                 float removedMolesH2 = molesOfH2 * burnPercentage;
-                 float removedMolesO2 = molesOfO2 * burnPercentage;
-                 Mole burnt = __instance.GasMixture.Volatiles.Remove(removedMolesH2);
-                 burnt.Add(__instance.GasMixture.Oxygen.Remove(removedMolesO2));
 
-                 __instance.GasMixture.Water.Add(new Mole(Chemistry.GasType.Water, burnt.Quantity * Mathf.Clamp(Convert.ToSingle(StaticAttributes.Combustonconfigs["FCW"].ToString()),0,1) ), 0f)
-                 {
-                     Energy = burnt.Energy
-                 });
-
-                 SOGS.log("AtmosphereCombustPatch :: Prefix --> combustion create a wather ", SOGS.Logs.DEBUG);
-
-                 __instance.CombustionEnergy = __instance.GasMixture.Volatiles.Enthalpy * removedMolesH2;
-                 __instance.GasMixture.AddEnergy(__instance.CombustionEnergy);
-                 __instance.BurnedPropaneRatio = removedMolesH2;
-                 __instance.CleanBurnRate = float.Parse(typeof(Atmosphere).GetMethod("CombustableMix", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(__instance, null).ToString());
-                 ____inflamed = true;
-             }
-             catch (Exception e)
-             {
-                 Debug.LogException(e);
-             }*/
             SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.GasMixture.Oxygen.Quantity + __instance.GasMixture.LiquidOxygen.Quantity + " TotalOxygen  " + __instance.ReferenceId, SOGS.Logs.DEBUG);
             SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.GasMixture.TotalFuel + " TotalFuel  " + __instance.ReferenceId, SOGS.Logs.DEBUG);
             SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.BurnedPropaneRatio + " BurnedPropaneRatio  " + __instance.ReferenceId, SOGS.Logs.DEBUG);
@@ -55,56 +32,78 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
 
             // copy of Combust -> Atmosphere
             float totalFuel = __instance.GasMixture.TotalFuel;
-            float quantity = __instance.GasMixture.NitrousOxide.Quantity;
-            float num = __instance.GasMixture.Oxygen.Quantity + __instance.GasMixture.LiquidOxygen.Quantity;
-            bool flag = totalFuel < AtmosphereHelper.MinimumMolesForProcessing || (num < AtmosphereHelper.MinimumMolesForProcessing && quantity < AtmosphereHelper.MinimumMolesForProcessing);
-            float num2 = num * 2f + quantity;
-            float num3 = num * 2f / num2;
-            float num4 = quantity / num2;
-            float num5 = __instance.GasMixture.LiquidVolatiles.Quantity / totalFuel;
-            float num6 = __instance.GasMixture.LiquidOxygen.Quantity / num;
-            float num7 = Mathf.Min(totalFuel, num2);
-            float num8 = num7 * (num3 / 2f);
-            float num9 = num7 * num4;
-            float num10;
+            float totalno = __instance.GasMixture.NitrousOxide.Quantity + __instance.GasMixture.LiquidNitrousOxide.Quantity;
+            float Totalo = __instance.GasMixture.Oxygen.Quantity + __instance.GasMixture.LiquidOxygen.Quantity;
+
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " TotalFuel  " + __instance.GasMixture.TotalFuel, SOGS.Logs.DEBUG);
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " totalno  " + totalno, SOGS.Logs.DEBUG);
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " Totalo  " + Totalo, SOGS.Logs.DEBUG);
+
+
+
+            bool flag = totalFuel < AtmosphereHelper.MinimumMolesForProcessing || (Totalo < AtmosphereHelper.MinimumMolesForProcessing && totalno < AtmosphereHelper.MinimumMolesForProcessing);
+
+            float num3 = Totalo * 2f + totalno;
+            float num4 = Totalo * 2f / num3;
+            float num5 = totalno / num3;
+            float num6 = __instance.GasMixture.LiquidVolatiles.Quantity / totalFuel;
+            float num7 = __instance.GasMixture.LiquidOxygen.Quantity / Totalo;
+            float num8 = __instance.GasMixture.LiquidNitrousOxide.Quantity / totalno;
+            float num9 = Mathf.Min(totalFuel, num3);
+            float num10 = num9 * (num4 / 2f);
+            float num11 = num9 * num5;
+            float num12;
+
             if (rateOverride != 0f)
             {
-                num10 = Mathf.Clamp(rateOverride, 0f, 1f);
+                num12 = Mathf.Clamp(rateOverride, 0f, 1f);
             }
             else if (flag)
             {
-                num10 = 1f;
+                num12 = 1f;
             }
-            else if (num4 >= 0.1f)
+            else if (num5 >= 0.1f)
             {
-                num10 = 1f / MathF.Pow(0.0025f * (__instance.GasMixture.Temperature + 273f), 1.01f) + 0.05f;
-                num10 = Mathf.Clamp(num10, 0f, 1f) / 5f;
+                num12 = 1f / MathF.Pow(0.0025f * (__instance.GasMixture.Temperature + 273f), 1.01f) + 0.05f;
+                num12 = Mathf.Clamp(num12, 0f, 1f) / 5f;
             }
             else
             {
-                num10 = 1f / MathF.Pow(0.002f * (__instance.GasMixture.Temperature + 273f), 1.6f) + 0.05f;
-                num10 = Mathf.Clamp(num10, 0f, 1f) / 5f;
+                num12 = 1f / MathF.Pow(0.002f * (__instance.GasMixture.Temperature + 273f), 1.6f) + 0.05f;
+                num12 = Mathf.Clamp(num12, 0f, 1f) / 5f;
             }
-            float num11 = num7 * num10 * num3;
-            float num12 = num7 * num10 * num4;
-            float num13 = num8 * num10;
-            float removedMoles = num9 * num10;
+            float num13 = num9 * num12 * num4;
+            float num14 = num9 * num12 * num5;
+            float num15 = num10 * num12;
+            float num16 = num11 * num12;
 
-            // sum values of h2 and 02 .... 
-            float removedOxigen = (num13 * num6)+(num13 * (1f - num6))+ removedMoles;
-            float removedh2 = ((num11 * (1f - num5))/2) + ((num11 * num5)/2) + ((num12 * (1f - num5))/2) + ((num12 * num5)/2);
+            GasMixture o2comb = new GasMixture(__instance.GasMixture.Volatiles.Remove(num13 * (1f - num6)));
+            o2comb.Add(__instance.GasMixture.LiquidVolatiles.Remove(num13 * num6));
+            o2comb.Add(__instance.GasMixture.LiquidOxygen.Remove(num15 * num7));
+            o2comb.Add(__instance.GasMixture.Oxygen.Remove(num15 * (1f - num7)));
+            GasMixture no2comb = new GasMixture(__instance.GasMixture.Volatiles.Remove(num14 * (1f - num6)));
+            no2comb.Add(__instance.GasMixture.LiquidVolatiles.Remove(num14 * num6));
+            no2comb.Add(__instance.GasMixture.LiquidNitrousOxide.Remove(num16 * num8));
+            no2comb.Add(__instance.GasMixture.NitrousOxide.Remove(num16 * (1f - num8)));
 
-            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + removedOxigen + " removedOxigen  " + __instance.ReferenceId, SOGS.Logs.DEBUG);
-            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + removedh2 + " removedh2  " + __instance.ReferenceId, SOGS.Logs.DEBUG);
-            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + MathF.Min(removedOxigen, removedh2) * Mathf.Clamp(Convert.ToSingle(StaticAttributes.Combustonconfigs["FCW"].ToString()), 0, 1) + " add agua " + __instance.ReferenceId, SOGS.Logs.DEBUG);
+            float remove = no2comb.TotalMolesGassesAndLiquids + o2comb.TotalMolesGassesAndLiquids * (2f / 3f);
+
             ///////////////////////////
-            
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " no2comb  " + no2comb.TotalMolesGassesAndLiquids, SOGS.Logs.DEBUG);
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " o2comb  " + o2comb.TotalMolesGassesAndLiquids, SOGS.Logs.DEBUG);
+
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " remove  " + remove, SOGS.Logs.DEBUG);
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " qualif  " + Mathf.Clamp(Convert.ToSingle(StaticAttributes.Combustonconfigs["FCW"].ToString()), 0, 1), SOGS.Logs.DEBUG);
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " totaladd  " + (remove * Mathf.Clamp(Convert.ToSingle(StaticAttributes.Combustonconfigs["FCW"].ToString()), 0, 1)), SOGS.Logs.DEBUG);
+
             //// --- new add stream
 
-            __instance.GasMixture.Steam.Add(new Mole(Chemistry.GasType.Steam, MathF.Min(removedOxigen, removedh2) * Mathf.Clamp(Convert.ToSingle(StaticAttributes.Combustonconfigs["FCW"].ToString()),0,1), 0f)
+            __instance.GasMixture.Steam.Add(new Mole(Chemistry.GasType.Steam, remove * Mathf.Clamp(Convert.ToSingle(StaticAttributes.Combustonconfigs["FCW"].ToString()), 0, 1), 0f)
             {
                 Energy = __instance.CombustionEnergy
             });
+
+            SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.ReferenceId + " Steam  " + totalno, SOGS.Logs.DEBUG);
         }
 
 
@@ -116,6 +115,44 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
         {
 
         }
-
     }
+
+    [HarmonyPatch]
+    public class water
+    {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Atmosphere), "StateChange")]
+        private static void Posfix(Atmosphere __instance)
+        {
+            try {
+                    float num = 0f;
+                    float waterqty = __instance.GasMixture.Water.Quantity;
+                    num += __instance.GasMixture.PollutedWater.Quantity;
+                    num += __instance.GasMixture.LiquidNitrogen.Quantity;
+                    num += __instance.GasMixture.LiquidOxygen.Quantity;
+                    num += __instance.GasMixture.LiquidVolatiles.Quantity;
+                    num += __instance.GasMixture.LiquidCarbonDioxide.Quantity;
+                    num += __instance.GasMixture.LiquidPollutant.Quantity;
+                    num += __instance.GasMixture.LiquidNitrousOxide.Quantity;
+                    num += __instance.GasMixture.LiquidHydrogen.Quantity;
+
+                    if (num > 0f)
+                    {
+
+                        SOGS.log("AtmosphereCondensationTypePatch :: Posfix " + __instance.ReferenceId + " ---> qty " + num, SOGS.Logs.DEBUG);
+                        SOGS.log("AtmosphereCondensationTypePatch :: Posfix " + __instance.ReferenceId + " ---> water qty " + waterqty, SOGS.Logs.DEBUG);
+                        if (waterqty > 0f) {
+                            __instance.GasMixture.Water.Clear();
+                            SOGS.log("AtmosphereCondensationTypePatch :: Posfix " + __instance.ReferenceId + " ---> af water qty " + __instance.GasMixture.Water.Quantity, SOGS.Logs.DEBUG);
+                            __instance.GasMixture.PollutedWater.Add(new Mole(Chemistry.GasType.PollutedWater, waterqty, 0f));
+                            SOGS.log("AtmosphereCondensationTypePatch :: Posfix " + __instance.ReferenceId + " ---> add water pol qty " + waterqty, SOGS.Logs.DEBUG);
+                        }
+                    }
+            }catch(Exception ex)
+            {
+                SOGS.log("AtmosphereCondensationTypePatch :: Posfix error" + ex, SOGS.Logs.DEBUG);
+            }
+        }
+    }
+
 }
