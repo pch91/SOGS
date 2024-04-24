@@ -63,6 +63,10 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
                     {
                         harmony.PatchAll(typeof(AtmosphereCombustPatch));
                     }
+                    if (bool.Parse(StaticAttributes.configs["EnabledDirtyW"].ToString()))
+                    {
+                        harmony.PatchAll(typeof(water));
+                    }
                     if (bool.Parse(StaticAttributes.configs["EnabledT"].ToString()))
                     {
                         harmony.PatchAll(typeof(GeothermalAtmospherePatch));
@@ -81,14 +85,16 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
         }
 
         private void Handleconfig()
-        {
+        { 
             mainconfigs.Add("LogEnabled", Config.Bind("0 - General configuration", "Log Level", "info", "Enable or disable logs. values can be debug , info or error"));
             mainconfigs.Add("EnabledMod", Config.Bind("0 - General configuration", "Eneble mod", true, "Enable or disable mod. values can be false or true"));
             mainconfigs.Add("EnabledB", Config.Bind("0 - General configuration", "Eneble Battery Nuke", true, "Enable or disable part of mod. values can be false or true"));
             mainconfigs.Add("EnabledC", Config.Bind("0 - General configuration", "Eneble Combuston system", true, "Enable or disable part of mod. values can be false or true"));
             mainconfigs.Add("EnabledT", Config.Bind("0 - General configuration", "Eneble Termal System", true, "Enable or disable part of mod. values can be false or true"));
-            mainconfigs.Add("EnabledM", Config.Bind("0 - General configuration", "Eneble Mine System", false, "Enable or disable part of mod. values can be false or true \n is ALFA (not safe)"));
+            mainconfigs.Add("EnabledM", Config.Bind("0 - General configuration", "Eneble Mine System", true, "Enable or disable part of mod. values can be false or true"));
             mainconfigs.Add("EnabledBP", Config.Bind("0 - General configuration", "Eneble Backpack System", true, "Enable or disable part of mod. values can be false or true"));
+            mainconfigs.Add("EnabledDirtyW", Config.Bind("0 - General configuration", "Eneble polluted water contact System", true, "Enable or disable polluting water when in contact with another liquid. values can be false or true \n true values mean that when purified water is in contact with another liquid it will become polluted and change to polluted water"));
+
 
             fconfigEvents.Add("OuchRadius", Config.Bind("1 - Battery", "Damage Radius", 190f, "Minimum battery damage radius to food and people"));
             fconfigEvents.Add("OuchDps", Config.Bind("1 - Battery", "Damage increment", 0.5f, "Damage factor dealt to food and people\n Values between 0 and 1"));
@@ -100,6 +106,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             fconfigEvents.Add("DamageRange", Config.Bind("3 - Thermal", "Action Radios", 10f, "conversation radius near lava"));
             fconfigEvents.Add("MaxPowerPerVolume", Config.Bind("2 - Thermal", "Max Power Per Volume", 100f, "maximum temperature transmission near the lava"));
 
+            mainconfigs.Add("EnabledMDMRegions", Config.Bind("2 - Mine", "Eneble Deep mine regions", true, "Enable or disable DeepMine regions in Mine System. values can be false or true \n true values able DeepMiner only works on places has a mines"));
             fconfigEvents.Add("rangeDP", Config.Bind("2 - Mine", "Distance", 10f, "maximum distance that deepMine picks up ore"));
             fconfigEvents.Add("CentrifugeDirtyOreMetod", Config.Bind("2 - Mine", "return method", (byte)2, "Pre-processing return method, values can be 1 or 2: \n 1 - does not return rare ores like lead,uranium,nikel....\n 2 - returns a reduced percentage for rare ores."));
             fconfigEvents.Add("Ores", Config.Bind("2 - Mine", "Ores aplicate", "LEAD,COBALT,NICKEL", "Ores in which the method will be applied ....\n  COBALT,LEAD,NICKEL,URANIUM They are the ores that can be applied when specifying more than one separated by a comma."));
@@ -120,6 +127,8 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             StaticAttributes.configs.Add("EnabledT", (mainconfigs["EnabledT"] as ConfigEntry<bool>).Value);
             StaticAttributes.configs.Add("EnabledM", (mainconfigs["EnabledM"] as ConfigEntry<bool>).Value);
             StaticAttributes.configs.Add("EnabledBP", (mainconfigs["EnabledBP"] as ConfigEntry<bool>).Value);
+            StaticAttributes.configs.Add("EnabledDirtyW", (mainconfigs["EnabledDirtyW"] as ConfigEntry<bool>).Value);
+
 
             StaticAttributes.Baterryconfigs.Add("OuchRadius", (fconfigEvents["OuchRadius"] as ConfigEntry<float>).Value);
             StaticAttributes.Baterryconfigs.Add("OuchDps", (fconfigEvents["OuchDps"] as ConfigEntry<float>).Value);
@@ -131,7 +140,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
             StaticAttributes.Thermalconfigs.Add("DamageRange", (fconfigEvents["DamageRange"] as ConfigEntry<float>).Value);
             StaticAttributes.Thermalconfigs.Add("MaxPowerPerVolume", (fconfigEvents["MaxPowerPerVolume"] as ConfigEntry<float>).Value);
 
-
+            StaticAttributes.configs.Add("DeepMinerRegions", (mainconfigs["EnabledMDMRegions"] as ConfigEntry<bool>).Value);
             StaticAttributes.mineConfigsFloat.Add("rangeDP", (fconfigEvents["rangeDP"] as ConfigEntry<float>).Value);
             StaticAttributes.CentrifugeDirtyOreMetod = (fconfigEvents["CentrifugeDirtyOreMetod"] as ConfigEntry<byte>).Value;
             StaticAttributes.mineConfigsFloat.Add("RetCentPorc", (fconfigEvents["RetCentPorc"] as ConfigEntry<float>).Value);
