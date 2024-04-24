@@ -18,7 +18,7 @@ This SOGS mog and a set of changes that bring, in addition to a greater challeng
 - Rxclusive belt slot inside backpacks
 - belt -> backpack only allowed when in its slot
 
- [h1] Polluted water contact System[/h1]
+ <h2>Polluted water contact System</h2>
 when purified water is in contact with another liquid it will become polluted and change to polluted water
 
 <h2>Combustion</h2>
