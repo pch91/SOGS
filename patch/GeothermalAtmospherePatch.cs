@@ -68,13 +68,13 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
                         Human human = __instance.Thing.RootParent as Human;
                         SOGS.log("GeothermalAtmospherePatch2 :: ConvectionPosfix 021--> " + __instance.ReferenceId, SOGS.Logs.DEBUG);
 
-                        if (human.HelmetSlot.Occupant != null
-                            && !human.HelmetSlot.Occupant.IsOpen
-                            && human.HelmetSlot.Occupant.PrefabName.Equals("ItemHardsuitHelmet")
-                            && human.SuitSlot.Occupant != null
-                            && human.SuitSlot.Occupant.PrefabName.Equals("ItemHardSuit")
-                            && human.SuitSlot.Occupant.Powered
-                            && human.UniformSlot.Occupant != null)
+                        if (human.HelmetSlot.Get() != null
+                            && !human.HelmetSlot.Get().IsOpen
+                            && human.HelmetSlot.Get().PrefabName.Equals("ItemHardsuitHelmet")
+                            && human.SuitSlot.Get() != null
+                            && human.SuitSlot.Get().PrefabName.Equals("ItemHardSuit")
+                            && human.SuitSlot.Get().Powered
+                            && human.UniformSlot.Get() != null)
                         {
                             return;
                         }
