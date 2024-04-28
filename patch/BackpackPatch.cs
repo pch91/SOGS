@@ -121,6 +121,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                             destinationslottype == Slot.Class.Back
                             || destinationslottype == Slot.Class.Belt
                             || destinationslottype == Slot.Class.Uniform
+                            || destinationSlot.Parent is CardboardBox
                         )
                     )
                     ||
@@ -139,7 +140,16 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                         &&
                         destinationslottype == Slot.Class.Uniform
                     )
-
+                    ||
+                    (
+                        __instance is CardboardBox
+                        && (
+                            destinationslottype == Slot.Class.Back
+                            || destinationslottype == Slot.Class.Belt
+                            || destinationslottype == Slot.Class.Uniform
+                            || destinationSlot.Parent is CardboardBox
+                        )
+                    )
                 )
                 {
                     __result = false;
