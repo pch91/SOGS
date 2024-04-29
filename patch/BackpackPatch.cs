@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.Localization2;
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Items;
 using HarmonyLib;
@@ -10,6 +11,12 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
     [HarmonyPatch]
     class BackpackPatch
     {
+
+        static Assets.Scripts.Localization2.GameString eMsgSogsStorageNSupport = Assets.Scripts.Localization2.GameString.Create(new string[]
+                                                    {
+                                                        "sogsstoragensupport",
+                                                        "It storage does not support this item"
+                                                    });
 
         [HarmonyPatch(typeof(DynamicSpawnData), "GetSlotIn")]
         [HarmonyPostfix]
@@ -96,7 +103,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 
         [HarmonyPatch(typeof(Assets.Scripts.Objects.Thing), "CanEnter")]
         [HarmonyPostfix]
-        private static void CanEnterpatch(Assets.Scripts.Objects.Thing __instance, Slot destinationSlot, ref bool __result)
+        private static void CanEnterpatch(Assets.Scripts.Objects.Thing __instance, Slot destinationSlot, ref CanEnterResult __result)
         {
 
             if (destinationSlot.Parent is DynamicThing && __instance is DynamicThing)
@@ -140,7 +147,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                         &&
                         destinationslottype == Slot.Class.Uniform
                     )
-                    ||
+                    || 
                     (
                         __instance is CardboardBox
                         && (
@@ -152,7 +159,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
                     )
                 )
                 {
-                    __result = false;
+                    __result = CanEnterResult.Fail(eMsgSogsStorageNSupport);
                 }
             }
 
