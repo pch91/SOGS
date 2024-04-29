@@ -3,6 +3,7 @@ using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Pipes;
 using Assets.Scripts.Util;
+using Assets.Scripts.Voxel;
 using HarmonyLib;
 using Reagents;
 using System;
@@ -157,8 +158,9 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch
 
                 typeof(DeepMiner).GetField("_timeSinceLastOreSpawn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(__instance, GameManager.GameTime);
                 SOGS.log("MinePatch :: DPSpawnOrePatch --> " + __instance.ReferenceId + " _timeSinceLastOreSpawn " + typeof(DeepMiner).GetField("_timeSinceLastOreSpawn", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance), SOGS.Logs.DEBUG);
+                return false;
             }
-            return false;
+            return true;
         }
 
         [HarmonyPrefix]
