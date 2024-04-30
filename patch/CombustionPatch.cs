@@ -7,8 +7,11 @@ using Reagents;
 using sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.patch;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using static Assets.Scripts.Objects.Slot;
 
 namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scripts
 {
@@ -24,6 +27,9 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
         {
 
             __state = new Dictionary<string, object>();
+
+            GasMixture copygasMixture = new GasMixture(__instance.GasMixture);
+
 
             SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.GasMixture.Oxygen.Quantity + __instance.GasMixture.LiquidOxygen.Quantity + " TotalOxygen  " + __instance.ReferenceId, SOGS.Logs.DEBUG);
             SOGS.log("AtmosphereCombustPatch :: Prefix --> " + __instance.GasMixture.TotalFuel + " TotalFuel  " + __instance.ReferenceId, SOGS.Logs.DEBUG);
@@ -77,14 +83,14 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv.Scrip
             float num15 = num10 * num12;
             float num16 = num11 * num12;
 
-            GasMixture o2comb = new GasMixture(__instance.GasMixture.Volatiles.Remove(num13 * (1f - num6)));
-            o2comb.Add(__instance.GasMixture.LiquidVolatiles.Remove(num13 * num6));
-            o2comb.Add(__instance.GasMixture.LiquidOxygen.Remove(num15 * num7));
-            o2comb.Add(__instance.GasMixture.Oxygen.Remove(num15 * (1f - num7)));
-            GasMixture no2comb = new GasMixture(__instance.GasMixture.Volatiles.Remove(num14 * (1f - num6)));
-            no2comb.Add(__instance.GasMixture.LiquidVolatiles.Remove(num14 * num6));
-            no2comb.Add(__instance.GasMixture.LiquidNitrousOxide.Remove(num16 * num8));
-            no2comb.Add(__instance.GasMixture.NitrousOxide.Remove(num16 * (1f - num8)));
+            GasMixture o2comb = new GasMixture(copygasMixture.Volatiles.Remove(num13 * (1f - num6)));
+            o2comb.Add(copygasMixture.LiquidVolatiles.Remove(num13 * num6));
+            o2comb.Add(copygasMixture.LiquidOxygen.Remove(num15 * num7));
+            o2comb.Add(copygasMixture.Oxygen.Remove(num15 * (1f - num7)));
+            GasMixture no2comb = new GasMixture(copygasMixture.Volatiles.Remove(num14 * (1f - num6)));
+            no2comb.Add(copygasMixture.LiquidVolatiles.Remove(num14 * num6));
+            no2comb.Add(copygasMixture.LiquidNitrousOxide.Remove(num16 * num8));
+            no2comb.Add(copygasMixture.NitrousOxide.Remove(num16 * (1f - num8)));
 
             float remove = no2comb.TotalMolesGassesAndLiquids + o2comb.TotalMolesGassesAndLiquids * (2f / 3f);
 
