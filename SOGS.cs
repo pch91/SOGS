@@ -44,7 +44,7 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
         {
             try
             {
-                log("Start - RemoveReciples", Logs.INFO);
+                log("Start - SOGS", Logs.INFO);
                 Instance = this;
                 //Harmony.DEBUG = true;
                 Handleconfig();
@@ -53,26 +53,38 @@ namespace sogs_standing_on_giants_shoulders_a_collection_of_physics_improv
                     var harmony = new Harmony("net.pch91.stationeers.SOGS.patch");
                     if (bool.Parse(StaticAttributes.configs["EnabledBP"].ToString()))
                     {
+                        log("Load - Backpack System", Logs.INFO);
+
                         harmony.PatchAll(typeof(BackpackPatch));
                     }
                     if (bool.Parse(StaticAttributes.configs["EnabledM"].ToString()))
                     {
+                        log("Load - Mine System", Logs.INFO);
+
                         harmony.PatchAll(typeof(MinePatch));
                     }
                     if (bool.Parse(StaticAttributes.configs["EnabledC"].ToString()))
                     {
+                        log("Load - Combuston system", Logs.INFO);
+
                         harmony.PatchAll(typeof(AtmosphereCombustPatch));
                     }
                     if (bool.Parse(StaticAttributes.configs["EnabledDirtyW"].ToString()))
                     {
+                        log("Load -  polluted water contact System", Logs.INFO);
+
                         harmony.PatchAll(typeof(water));
                     }
                     if (bool.Parse(StaticAttributes.configs["EnabledT"].ToString()))
                     {
+                        log("Load - Termal System", Logs.INFO);
+
                         harmony.PatchAll(typeof(GeothermalAtmospherePatch));
                     }
                     if (bool.Parse(StaticAttributes.configs["EnabledB"].ToString()))
                     {
+                        log("Load - Battery Nuke", Logs.INFO);
+
                         harmony.PatchAll(typeof(AtomicBatteryPatch));
                     }
                 }
